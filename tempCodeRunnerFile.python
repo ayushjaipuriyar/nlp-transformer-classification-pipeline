@@ -1,0 +1,43 @@
+import json
+
+
+# Function to read data from a file
+def load_json_from_file(file_path):
+    with open(file_path, "r") as infile:
+        return json.load(infile)
+
+
+def extract_all_content_by_label(data, label):
+    # List to hold the extracted records
+    records = []
+    # Loop through the list of records
+    for record in data["val"]:
+        if record["label"] == label:
+            # Append a dictionary with id, label, and content
+            records.append(
+                {
+                    "id": record["id"],
+                    "label": record["label"],
+                    "content": record["content"],
+                }
+            )
+    return records
+
+
+# Read data from val.json
+data = load_json_from_file("val.json")
+
+# Example usage
+label_to_search = "National Railway Museum"
+content = extract_all_content_by_label(data, label_to_search)
+
+if content:
+    # Prepare data to be saved in a new JSON
+    result = {"label": label_to_search, "content": content}
+
+    # Save the result to a new JSON file
+    with open("National Railway Museumextracted_content.json", "w") as outfile:
+        json.dump(result, outfile, indent=4)
+    print("Content saved in 'extracted_content.json'.")
+else:
+    print("Label not found.")

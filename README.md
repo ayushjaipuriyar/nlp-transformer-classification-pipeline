@@ -29,32 +29,79 @@ pip install -r requirements.txt
 2. Launch the notebook server and open `coursework.ipynb`:
 
 ```bash
-jupyter notebook coursework.ipynb
-```
 
-3. The notebook expects the dataset files to be in the repository root. If you move them, update the file paths inside the notebook accordingly.
+# Classification Coursework — TaD
 
-What you'll find in the notebook
-- Exploratory data analysis and basic visualisations.
-- Data cleaning and preprocessing steps; tokens, features, or other transforms used for models.
-- Baseline classifier(s) (e.g., logistic regression or naive baseline) and at least one improved approach.
-- Evaluation: accuracy and per-class F1 (or similar) and a discussion of results and limitations.
+This repository contains my completed submission for the Text-as-Data (TaD) multi-class classification coursework. The project centers on building, evaluating, and analyzing text classifiers for museum records, following a structured set of tasks and questions.
 
-Assumptions and notes
-- I intentionally kept outputs (model checkpoints, large logs) out of the repository to keep it small. If you reproduce experiments, save large artifacts outside the repo or add them to `.gitignore`.
-- The PDF `Classification Coursework Specification.docx.pdf` contains the formal brief. The README is a companion summary, not a substitute for the spec.
+## What I Did and Achieved
 
-Troubleshooting
-- If a dependency fails to install, check your Python version (recommended: 3.8+). If necessary, create a fresh virtual environment.
-- If the notebook cannot find the data files, ensure `dataset.json` / `cleaned_dataset.json` are in the repo root or update the paths in the notebook.
+### 1. Data Cleaning & Preparation
+- Downloaded and loaded the provided dataset of museum records.
+- Identified and fixed issues in the training split, including:
+  - Standardizing content and label keys.
+  - Removing entries with missing or invalid data.
+  - Fuzzy-matching labels to ensure consistency.
+- Saved the cleaned dataset as `cleaned_dataset.json` for further analysis.
 
-Reproducibility and extension ideas
-- To reproduce results exactly, set random seeds in the notebook cells where models are trained.
-- You can add experiments (different feature engineering, different model families) in separate notebook cells or copy the notebook and create a variant.
+### 2. Exploratory Data Analysis (EDA)
+- Reported sample counts and percentage splits for training, validation, and test sets.
+- Calculated minimum and maximum text lengths for each split.
+- Identified the five most frequent tokens per class using spaCy tokenization.
 
-License and contact
-- This repository contains coursework submitted for assessment. If you want to reuse any code, please check with the course guidelines or contact the author by opening an issue.
+### 3. Prompting Large Language Models (LLMs)
+- Evaluated three different prompt templates with Llama-3.1-8B-Instruct for record classification.
+- Calculated accuracy, macro precision, recall, and F1 for each template.
+- Handled invalid LLM outputs as a sixth class and commented on results.
 
----
+### 4. Fine-tuning Transformer Models
+- Fine-tuned a BERT-base transformer using HuggingFace Trainer with specified hyperparameters (8 epochs, lr=5e-5, batch size=8).
+- Evaluated the model on the validation set, reporting per-class and macro metrics.
 
-If you'd like, I can extract specific headings or instructions from the attached coursework PDF and add a short summary to this README. I can also produce a short description and a set of topics you can paste into GitHub's About panel.
+### 5. Validation Set Issue & Fix
+- Diagnosed poor validation performance using a confusion matrix.
+- Identified and fixed a problem in the validation set, improving model results.
+
+### 6. Hyperparameter Tuning & Model Comparison
+- Trained and evaluated four transformer models: BERT, RoBERTa, DistilBERT, BiomedBERT.
+- Used `load_best_model_at_end` to select the best checkpoint for each.
+- Compared models using accuracy, macro precision, recall, and F1.
+
+### 7. Final Evaluation & Deployment
+- Loaded the best-performing model and evaluated it on the test set using a text-classification pipeline.
+- Reported per-class and macro metrics, and discussed deployment suitability for the client.
+
+### 8. Generative AI Usage
+- Documented any use of generative AI tools in the assignment, as required.
+
+## Repository Contents
+
+- `coursework.ipynb` — Main notebook with code, analysis, and answers.
+- `dataset.json` — Original dataset.
+- `cleaned_dataset.json` — Cleaned dataset after preprocessing.
+- `val.json` — Validation split.
+- `llm_prompt_template_1.json`, `llm_prompt_template_2.json`, `llm_prompt_template_3.json` — LLM prompt templates and results.
+- `requirements.txt` — Python dependencies.
+- `Classification Coursework Specification.docx.pdf` — Assignment brief and marking criteria.
+
+## How to Run
+
+1. Create and activate a Python virtual environment:
+	```bash
+	python -m venv .venv
+	source .venv/bin/activate
+	pip install -r requirements.txt
+	```
+2. Launch Jupyter Notebook:
+	```bash
+	jupyter notebook coursework.ipynb
+	```
+3. Ensure all dataset files are in the repository root. Update notebook paths if needed.
+
+## Notes
+- Large outputs and model checkpoints are not included to keep the repo small.
+- For reproducibility, set random seeds in modeling cells.
+- See the assignment PDF for full details and marking criteria.
+
+## License & Contact
+This repository is coursework submitted for assessment. For reuse or questions, please open an issue or consult the course guidelines.
